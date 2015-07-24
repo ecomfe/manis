@@ -25,8 +25,19 @@ npm install manis
 var Manis = require('manis');
 var stripJSONComments = require('strip-json-comments');
 
+var loader = function (text) {
+    return JSON.parse(stripJSONComments(text));
+};
+
 var manis = new Manis({
     files: [
+        {
+            // just for example, it should be loaded as yaml in fact.
+            name: '.eslintrc',
+            get: function (json) {
+                return {eslint: json};
+            }
+        },
         '.fecsrc',
         {
             name: 'package.json',
@@ -35,9 +46,7 @@ var manis = new Manis({
             }
         }
     ],
-    loader: function (content) {
-        return JSON.parse(stripJSONComments(content));
-    }
+    loader: loader
 });
 
 var options = manis.from('path/to/file.js');
