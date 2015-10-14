@@ -96,6 +96,32 @@ var options = manis.from('path/to/file.js');
 ```
 
 
+### User config
+
+```javascript
+var Manis = require('manis');
+
+var manis = new Manis({
+    files: [
+        '.fecsrc',
+        {
+            name: 'package.json',
+            get: 'fecs'
+        }
+    ]
+});
+
+manis.setDefault('default/path/to/config/fecs.json');
+
+// will find `~/.fecsrc`
+manis.setUserConfig();
+
+var options = manis.from('path/to/file.js');
+
+// do something cool with options
+```
+
+
 ### Within a gulp plugin
 
 ```javascript
@@ -129,6 +155,10 @@ module.exports = function MyGulpPlugin(options) {
 
 ### void Manis#setDefault(Object defaultValue);
 ### void Manis#setDefault(string filePath[, Object finderOptions]);
+
+### void Manis#setUserConfig();
+### void Manis#setUserConfig(Object userConfig);
+### void Manis#setUserConfig(string userConfigPathOrName[, Object finderOptions]);
 
 ### Object Manis#from(string path);
 
