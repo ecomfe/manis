@@ -125,6 +125,123 @@ describe('manis', function () {
 
     });
 
+    describe('Mains#setUserConfig', function () {
+        afterEach(function () {
+            mock.restore();
+        });
+
+        it('normal usage', function () {
+            var home = process.env.HOME;
+            var mockConfig = {
+                '/default/path/to/.fecsrc': '{"foo": true, "id": 1}',
+                '/path/to/.fecsrc': '{"bar": true, "id": 3}'
+            };
+
+            mockConfig[home + '/.fecsrc'] = '{"baz": true, "id": 2}';
+            mock(mockConfig);
+
+            var manis = new Manis('.fecsrc');
+            manis.setDefault('/default/path/to/.fecsrc');
+            manis.setUserConfig(home + '/.fecsrc');
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.id).toBe(3);
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+            expect(config.baz).toBe(true);
+        });
+
+        it('use `~` should be equal as expect', function () {
+            var home = process.env.HOME;
+            var mockConfig = {
+                '/default/path/to/.fecsrc': '{"foo": true, "id": 1}',
+                '/path/to/.fecsrc': '{"bar": true, "id": 3}'
+            };
+
+            mockConfig[home + '/.fecsrc'] = '{"baz": true, "id": 2}';
+            mock(mockConfig);
+
+            var manis = new Manis('.fecsrc');
+            manis.setDefault('/default/path/to/.fecsrc');
+            manis.setUserConfig('~/.fecsrc');
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.id).toBe(3);
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+            expect(config.baz).toBe(true);
+        });
+
+        it('no user config file', function () {
+            mock({
+                '/path/to/.fecsrc': '{"bar": true}'
+            });
+
+            var manis = new Manis('.fecsrc');
+            manis.setUserConfig('.fecsrc', {get: 'fecs'});
+
+            expect(manis.userConfig).toEqual(Object.create(null));
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.foo).toBeUndefined();
+            expect(config.bar).toBe(true);
+        });
+
+        it('get from existing finder but another name', function () {
+            var home = process.env.HOME;
+            var mockConfig = {
+                '/path/to/.fecsrc': '{"bar": true}'
+            };
+
+            mockConfig[home + '/fecs.json'] = '{"foo": true}';
+            mock(mockConfig);
+
+            var manis = new Manis('.fecsrc');
+            manis.setUserConfig('fecs.json');
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+        });
+
+        it('call userConfig withou param', function () {
+            var home = process.env.HOME;
+            var userConfig = {
+                '/path/to/.fecsrc': '{"bar": true}'
+            };
+
+            userConfig[home + '/.fecsrc'] = '{"foo": true}';
+            mock(userConfig);
+
+            var manis = new Manis('.fecsrc');
+            manis.setUserConfig();
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+        });
+
+        it('set userConfig directly', function () {
+            mock({
+                '/path/to/.fecsrc': '{"bar": true}'
+            });
+
+            var manis = new Manis('.fecsrc');
+            manis.setUserConfig({foo: true});
+
+            var config = manis.from('/path/to/foo.js');
+
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+        });
+
+    });
+
     describe('Manis#from', function () {
         afterEach(function () {
             mock.restore();
