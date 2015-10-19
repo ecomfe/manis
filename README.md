@@ -129,7 +129,7 @@ var Manis = require('manis');
 var map = require('map-stream');
 
 module.exports = function MyGulpPlugin(options) {
-  var manis = new Manis('.fecsrc', options);
+    var manis = new Manis('.fecsrc', options);
 
     return map(function (file, cb) {
 
@@ -173,6 +173,12 @@ module.exports = function MyGulpPlugin(options) {
  - `merge`, Boolean, Merge all config objects. default is true.
 
  - `cache`, Boolean, Cache config files. default is true.
+
+ - `rootName`, String, The name of flag when `enableRoot` set to true. default is 'root'.
+
+ - `enableRoot`, Boolean, Enable the root flag to stop lookup in up-level directory. default is false.
+
+ - `stopper`, Function, the predicate for stopping search. default is null.
 
 #### finderOptions
 

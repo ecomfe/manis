@@ -20,7 +20,7 @@ describe('manis', function () {
     });
 
 
-    it('should be have from method', function () {
+    it('should be having `from` method', function () {
 
         expect(typeof Manis.prototype.from).toBe('function');
 
@@ -86,7 +86,7 @@ describe('manis', function () {
             var manis = new Manis('.fecsrc');
             manis.setDefault('/default/path/.fecsrc', {get: 'fecs'});
 
-            expect(manis.defaultValue).toEqual(Object.create(null));
+            expect(manis.defaultConfig).toEqual(Object.create(null));
 
             var config = manis.from('/path/to/foo.js');
 
@@ -109,7 +109,7 @@ describe('manis', function () {
             expect(config.bar).toBe(true);
         });
 
-        it('set defaultValue directly', function () {
+        it('set defaultConfig directly', function () {
             mock({
                 '/path/to/.fecsrc': '{"bar": true}'
             });
@@ -319,7 +319,7 @@ describe('manis', function () {
         });
 
         it('find foo.json and bar.json', function () {
-            var manis = new Manis(['foo.json', 'bar.json']);
+            var manis = new Manis({files: ['foo.json', 'bar.json'], merge: true});
 
             mock({
                 'path/foo.json': '{"foo": 0, "bar": true}',
@@ -359,6 +359,89 @@ describe('manis', function () {
 
             config = manis.from('path/world.js');
             expect(config.foo).toBe(1);
+        });
+
+
+        it('orphan', function () {
+            var manis = new Manis({
+                orphan: true,
+                files: ['bar.json', 'foo.json']
+            });
+
+            mock({
+                'path/foo.json': '{"foo": 0, "bar": true}',
+                'path/bar.json': '{"foo": 1, "baz": true}',
+                'path/to/foo.json': '{"foo": 2, "bar": 0}',
+                'path/to/bar.json': '{"foo": 3}'
+            });
+
+            var config = manis.from('path/to/hello.js');
+
+            expect(config.foo).toBe(3);
+            expect(config.bar).toBeUndefined();
+            expect(config.baz).toBeUndefined();
+
+            config = manis.from('path/world.js');
+            expect(config.foo).toBe(1);
+        });
+
+
+        it('enableRoot with `root`', function () {
+            var manis = new Manis({
+                enableRoot: true,
+                files: ['foo.json']
+            });
+
+            mock({
+                'path/foo.json': '{"foo": 1, "baz": true}',
+                'path/to/foo.json': '{"root": true, "foo": 3}'
+            });
+
+            manis.setDefault({foo: 2, bar: 0});
+            var config = manis.from('path/to/hello.js');
+
+            expect(config.foo).toBe(3);
+            expect(config.bar).toBe(0);
+            expect(config.baz).toBeUndefined();
+        });
+
+        it('enableRoot with `bar`', function () {
+            var manis = new Manis({
+                rootName: 'bar',
+                enableRoot: true,
+                files: ['foo.json']
+            });
+
+            mock({
+                'path/foo.json': '{"foo": 1, "baz": true}',
+                'path/to/foo.json': '{"foo": 3}'
+            });
+
+            manis.setDefault({foo: 2, bar: 0});
+            var config = manis.from('path/to/hello.js');
+
+            expect(config.foo).toBe(3);
+            expect(config.bar).toBe(0);
+            expect(config.baz).toBe(true);
+        });
+
+
+        it('no lookup', function () {
+            var manis = new Manis({
+                lookup: false,
+                files: ['foo.json']
+            });
+
+            mock({
+                'path/foo.json': '{"foo": 1, "baz": true}',
+                'path/to/foo.json': '{"foo": 3}'
+            });
+
+            manis.setDefault({foo: 2, bar: 0});
+            var config = manis.from('path/to/hello.js');
+
+            expect(config.foo).toBe(2);
+            expect(config.bar).toBe(0);
         });
 
         it('custom getter - field name', function () {
@@ -415,6 +498,27 @@ describe('manis', function () {
             expect(config).toBeDefined();
             expect(config.foo).toBe(false);
             expect(config.bar).toBeUndefined();
+        });
+
+        it('custom stopper', function () {
+            var manis = new Manis({
+                files: 'foo.json',
+                stopper: function (start, root, configs) {
+                    return configs.length > 1;
+                }
+            });
+
+            mock({
+                'path/foo.json': '{"foo": false, "bar": false, "baz": true}',
+                'path/to/foo.json': '{"foo": false, "bar": true}',
+                'path/to/the/foo.json': '{"foo": true}'
+            });
+
+            var config = manis.from('path/to/the/hello-world.js');
+
+            expect(config.foo).toBe(true);
+            expect(config.bar).toBe(true);
+            expect(config.baz).toBeUndefined();
         });
     });
 
