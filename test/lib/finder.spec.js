@@ -145,6 +145,7 @@ describe('finder', function () {
             var finder = Finder.create(
                 'foo.json',
                 true,
+                null,
                 function loader(text) {
                     return {foo: false};
                 }
@@ -161,6 +162,29 @@ describe('finder', function () {
             expect(config.foo).toBe(false);
             expect(config.bar).toBeUndefined();
         });
+    });
+
+    it('custom stopper and ignore empty config', function () {
+        var options;
+        var finder = Finder.create({
+            name: 'foo.json',
+            stopper: function (start, root, configs) {
+                options = configs;
+                return start === root;
+            }
+        });
+
+        mock({
+            'path/to/foo.json': '{"foo": true}',
+            'path/foo.json': '{}'
+        });
+
+        var config = finder.from('path/to/');
+
+        expect(options).toBeDefined();
+        expect(options.length).toBe(1);
+        expect(config).toBeDefined();
+        expect(config.foo).toBe(true);
     });
 
 });
