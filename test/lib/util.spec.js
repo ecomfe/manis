@@ -61,6 +61,16 @@ describe('util', function () {
         expect(foobaz.baz).toBe(baz.baz);
     });
 
+    it('pick', function () {
+        var foo = {};
+        var bar = {foo: 1, bar: 1};
+        var baz = {foo: 0, baz: 1};
+
+
+        var pickBar = util.pick([foo, bar, baz]);
+        expect(pickBar).toBe(bar);
+    });
+
     /* eslint-disable no-new-wrappers */
     it('typeOf', function () {
         expect(util.typeOf('')).toBe('string');
