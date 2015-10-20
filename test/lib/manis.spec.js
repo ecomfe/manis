@@ -385,6 +385,26 @@ describe('manis', function () {
             expect(config.foo).toBe(1);
         });
 
+        it('orphan but config file not found', function () {
+            var manis = new Manis({
+                orphan: true,
+                files: 'bar.json'
+            });
+
+            mock({
+                'path/foobar.json': '{"foo": 0, "bar": true}'
+            });
+
+            manis.setDefault({
+                foo: 3
+            });
+            var config = manis.from('path/to/hello.js');
+
+            expect(config.foo).toBe(3);
+            expect(config.bar).toBeUndefined();
+            expect(config.baz).toBeUndefined();
+        });
+
 
         it('enableRoot with `root`', function () {
             var manis = new Manis({
