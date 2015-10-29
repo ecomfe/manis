@@ -1,6 +1,6 @@
 {
   "name": "manis",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Find and read your configuration files recursively",
   "main": "lib/manis.js",
   "scripts": {
