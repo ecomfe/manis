@@ -54,6 +54,8 @@ var options = manis.from('path/to/file.js');
 // do something cool with options
 ```
 
+#### NOTICE: the default loader strip comment after manis@0.3.0.
+
 ### Loading `.yml` with `js-yaml`
 
 ```javascript
@@ -71,6 +73,8 @@ var options = manis.from('path/to/file.js');
 
 // do something cool with options
 ```
+
+#### NOTICE: the default loader used `js-yaml` to load YAML and JSON content after manis@0.3.0.
 
 
 ### With defaults
@@ -159,6 +163,17 @@ module.exports = function MyGulpPlugin(options) {
 ### void Manis#setUserConfig();
 ### void Manis#setUserConfig(Object userConfig);
 ### void Manis#setUserConfig(string userConfigPathOrName[, Object finderOptions]);
+
+### Object Manis#from(string path);
+
+### Manis.yaml;
+
+Alias for `js-yaml` module.
+
+### Object Manis.loader;
+
+The default loader, parse JSON or YAML content with `js-yaml`.
+
 
 ### Object Manis#from(string path);
 
