@@ -35,5 +35,9 @@
     "istanbul": "^0.3.15",
     "jasmine-node": "^2.0.0",
     "mock-fs": "^3.0.0"
+  },
+  "dependencies": {
+    "js-yaml": "^3.5.1",
+    "strip-json-comments": "^2.0.0"
   }
 }
