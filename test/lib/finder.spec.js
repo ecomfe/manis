@@ -141,7 +141,7 @@ describe('finder', function () {
             expect(config.bar).toBeUndefined();
         });
 
-        it('custom loader', function () {
+        it('custom loader - multi params', function () {
             var finder = Finder.create(
                 'foo.json',
                 true,
