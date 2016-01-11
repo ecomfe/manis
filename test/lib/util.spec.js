@@ -198,4 +198,38 @@ describe('Get user\'s home directory', function () {
         });
 
     });
+
+});
+
+describe('default loader', function () {
+
+    it('JSON file', function () {
+        var config = util.loader('{"foo": false, "bar": true}', 'path/foo.json');
+
+        expect(config.foo).toBe(false);
+        expect(config.bar).toBe(true);
+    });
+
+    it('invalid JSON file', function () {
+
+        var config = util.loader('{"foo": false, "bar": true', 'path/foo.json');
+
+        expect(config).toEqual({});
+    });
+
+    it('YAML file', function () {
+
+        var config = util.loader('foo: false\nbar: true', 'path/foo.yml');
+
+        expect(config.foo).toBe(false);
+        expect(config.bar).toBe(true);
+    });
+
+    it('invalid YAML file', function () {
+
+        var config = util.loader('foo: false\nbar:[', 'path/foo.yml');
+
+        expect(config).toEqual({});
+    });
+
 });
