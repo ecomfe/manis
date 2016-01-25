@@ -212,9 +212,11 @@ describe('default loader', function () {
 
     it('invalid JSON file', function () {
 
-        var config = util.loader('{"foo": false, "bar": true', 'path/foo.json');
+        var reading = function () {
+            util.loader('{"foo": false, "bar": true', 'path/foo.json');
+        };
 
-        expect(config).toEqual({});
+        expect(reading).toThrow();
     });
 
     it('YAML file', function () {
@@ -227,9 +229,11 @@ describe('default loader', function () {
 
     it('invalid YAML file', function () {
 
-        var config = util.loader('foo: false\nbar:[', 'path/foo.yml');
+        var reading = function () {
+            util.loader('foo: false\nbar:[', 'path/foo.yml');
+        };
 
-        expect(config).toEqual({});
+        expect(reading).toThrow();
     });
 
 });
