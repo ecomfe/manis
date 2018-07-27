@@ -39,22 +39,6 @@ describe('util', function () {
         expect(foobaz.fecs.baz).toBe(baz.fecs.baz);
     });
 
-    it('merge array', function () {
-        var foo = {fecs: {foo: [1]}};
-        var bar = {fecs: {bar: 1}};
-        var baz = {fecs: {foo: [2, 3], baz: 1}};
-
-        var foobar = util.extend(foo, bar);
-
-        expect(foobar.fecs.foo).toBe(foo.fecs.foo);
-        expect(foobar.fecs.bar).toBe(bar.fecs.bar);
-
-        var foobaz = util.extend(foo, baz);
-
-        expect(foobaz.fecs.foo).toBe(foo.fecs.foo);
-        expect(foobaz.fecs.baz).toBe(baz.fecs.baz);
-    });
-
     it('extend should ignore property from prototype', function () {
         var foo = {foo: 1};
         var bar = Object.create({bar: 1});
