@@ -23,7 +23,7 @@
   "author": "chris <wfsr@foxmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "bugs": {
     "url": "https://github.com/ecomfe/manis/issues"
@@ -32,12 +32,12 @@
   "devDependencies": {
     "coveralls": "latest",
     "fecs": "latest",
-    "istanbul": "^0.4.2",
-    "jasmine-node": "^2.0.0",
-    "mock-fs": "^3.11.0"
+    "jest": "^24.9.0",
+    "mock-fs": "^4.10.3"
   },
   "dependencies": {
     "js-yaml": "^3.5.1",
+    "merge": "^1.2.1",
     "strip-json-comments": "^2.0.0"
   }
 }

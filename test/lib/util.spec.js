@@ -46,7 +46,7 @@ describe('util', function () {
         var foobar = util.extend(foo, bar);
 
         expect(foobar.foo).toBe(foo.foo);
-        expect(foobar.bar).toBeUndefined();
+        expect(foobar.bar).toBe(bar.bar);
     });
 
     it('mix', function () {
