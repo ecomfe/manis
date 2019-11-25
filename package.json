@@ -1,11 +1,11 @@
 {
   "name": "manis",
-  "version": "0.3.5",
+  "version": "1.0.0",
   "description": "Find and read your configuration files recursively",
   "main": "lib/manis.js",
   "scripts": {
     "lint": "fecs lib test/**/*.spec.js --type=js",
-    "coverage": "istanbul cover jasmine-node --captureExceptions test/**/*.spec.js",
+    "coverage": "jest test --coveragegit ",
     "test": "npm run lint && npm run coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
